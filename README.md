@@ -1,5 +1,5 @@
 # Plugin Loader for Shopware
-Required Minimum Shopware Version 5.2
+Required Minimum Shopware Version 5.2.2
 
 ## Installation
 * Checkout Plugin in /custom/plugins/RawPluginLoader

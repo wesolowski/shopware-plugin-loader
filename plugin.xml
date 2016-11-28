@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
+    <label lang="de">RawPluginLoader</label>
+    <label lang="en">RawPluginLoader</label>
+    <version>0.1</version>
+    <link>https://github.com/wesolowski/shopware-plugin-loader</link>
+    <author>Rafal Wesolowski</author>
+</plugin>
