@@ -6,5 +6,4 @@ use Shopware\Components\Plugin;
 
 class RawPluginLoader extends Plugin
 {
-
 }
