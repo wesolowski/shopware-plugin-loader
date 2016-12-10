@@ -1,6 +1,7 @@
 <?php
 namespace RawPluginLoader\Commands;
 
+use RawPluginLoader\Service\ActivatePlugin;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -32,29 +33,22 @@ class CheckPlugin extends ShopwareCommand
 
         $pluginsConfigs = $this->getPluginConfigs();
         $pluginListInfo = $this->getShopwarePluginInfo();
+        $activatePlugin = new ActivatePlugin(
+            $app,
+            $output,
+            $pluginListInfo
+        );
 
         $output->writeln("");
         foreach ($pluginsConfigs as $pluginPath => $pluginConfig) {
             $pluginIndent = basename($pluginPath);
 
             if (isset($pluginConfig['active'])) {
-                $isPluginActive = (bool)$pluginConfig['active'];
-
-                if (isset($pluginListInfo[$pluginIndent])
-                    && !$pluginListInfo[$pluginIndent]['active']
-                    && $isPluginActive
-                ) {
-                    $this->activatePlugin($output, $pluginIndent);
-                } elseif (isset($pluginListInfo[$pluginIndent])
-                    && $pluginListInfo[$pluginIndent]['active']
-                    && !$isPluginActive
-                ) {
-                    $this->unistallPlugin($output, $pluginIndent);
-                }
-
-                if (!$isPluginActive) {
-                    $this->deleteUnitTestFolder($pluginPath);
-                }
+                $activatePlugin->checkPlugin(
+                    (bool)$pluginConfig['active'],
+                    $pluginIndent,
+                    $pluginPath
+                );
             }
         }
         $output->writeln("");
@@ -109,61 +103,5 @@ class CheckPlugin extends ShopwareCommand
             ];
         }
         return $rows;
-    }
-
-    /**
-     * @param OutputInterface $output
-     * @param $pluginIndent
-     * @return array
-     */
-    private function activatePlugin(OutputInterface $output, $pluginIndent)
-    {
-        $app = $this->getApplication();
-
-        $input = new ArrayInput([
-            'command' => 'sw:plugin:install',
-            'plugin' => $pluginIndent
-        ]);
-        $app->doRun($input, $output);
-
-        $input = new ArrayInput([
-            'command' => 'sw:plugin:activate',
-            'plugin' => $pluginIndent
-        ]);
-        $app->doRun($input, $output);
-    }
-
-    /**
-     * @param OutputInterface $output
-     * @param $pluginIndent
-     */
-    protected function unistallPlugin(OutputInterface $output, $pluginIndent)
-    {
-        $app = $this->getApplication();
-
-        $input = new ArrayInput([
-            'command' => 'sw:plugin:deactivate',
-            'plugin' => $pluginIndent
-        ]);
-        $app->doRun($input, $output);
-
-        $input = new ArrayInput([
-            'command' => 'sw:plugin:uninstall',
-            'plugin' => $pluginIndent
-        ]);
-        $app->doRun($input, $output);
-    }
-
-    /**
-     * @param $pluginPath
-     */
-    private function deleteUnitTestFolder($pluginPath)
-    {
-        system("rm -rf " . escapeshellarg($pluginPath . '/Tests'));
-        system("rm -rf " . escapeshellarg($pluginPath . '/Test'));
-        system("rm -rf " . escapeshellarg($pluginPath . '/test'));
-        system("rm -rf " . escapeshellarg($pluginPath . '/tests'));
-        system("rm -rf " . escapeshellarg($pluginPath . '/phpunit.xml'));
-        system("rm -rf " . escapeshellarg($pluginPath . '/phpunit.xml.dist'));
     }
 }
