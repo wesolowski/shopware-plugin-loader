@@ -6,7 +6,8 @@ use Shopware\Components\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 
-class ActivatePlugin {
+class ActivatePlugin
+{
 
     /**
      * @var Application
@@ -40,7 +41,8 @@ class ActivatePlugin {
      * @param string $pluginIndent
      * @param string $pluginPath
      */
-    public function checkPlugin($isPluginActive, $pluginIndent, $pluginPath) {
+    public function checkPlugin($isPluginActive, $pluginIndent, $pluginPath)
+    {
         if (isset($this->pluginListInfo[$pluginIndent])
             && !$this->pluginListInfo[$pluginIndent]['active']
             && $isPluginActive

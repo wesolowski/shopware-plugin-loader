@@ -2,6 +2,7 @@
 namespace RawPluginLoader\Commands;
 
 use RawPluginLoader\Service\ActivatePlugin;
+use RawPluginLoader\Service\PluginList;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,14 +25,12 @@ class CheckPlugin extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("Start");
+        $this->refreshPluginList($output);
 
         $app = $this->getApplication();
-        $app->doRun(new ArrayInput([
-            'command' => 'sw:plugin:refresh',
-        ]), $output);
-
-        $pluginsConfigs = $this->getPluginConfigs();
+        $pluginsConfigs = (new PluginList(
+            $this->getContainer()->get('kernel')->getRootDir()
+        ))->getPluginConfigs();
         $pluginListInfo = $this->getShopwarePluginInfo();
         $activatePlugin = new ActivatePlugin(
             $app,
@@ -39,7 +38,6 @@ class CheckPlugin extends ShopwareCommand
             $pluginListInfo
         );
 
-        $output->writeln("");
         foreach ($pluginsConfigs as $pluginPath => $pluginConfig) {
             $pluginIndent = basename($pluginPath);
 
@@ -53,30 +51,6 @@ class CheckPlugin extends ShopwareCommand
         }
         $output->writeln("");
         $output->writeln("CheckPlugin is completed");
-    }
-
-    /**
-     * @return array
-     */
-    protected function getPluginConfigs()
-    {
-        $shopDir = $this->getContainer()->get('kernel')->getRootDir();
-        $pluginInfo = [];
-
-        $pluginDistConfigs = glob($shopDir . "/custom/plugins/*/pluginconfig.dist.php");
-        foreach ($pluginDistConfigs as $pluginDistConfig) {
-            $pluginInfo[dirname($pluginDistConfig)] = require $pluginDistConfig;
-        }
-
-        $pluginConfigs = glob($shopDir . "/custom/plugins/*/pluginconfig.php");
-        foreach ($pluginConfigs as $pluginConfig) {
-            $dirPluginConfig = dirname($pluginConfig);
-            $pluginConfigInfo = require $pluginConfig;
-            $pluginInfo[dirname($pluginConfig)] = (isset($pluginInfo[$dirPluginConfig]))
-                ? array_merge($pluginInfo[$dirPluginConfig], $pluginConfigInfo)
-                : $pluginConfigInfo;
-        }
-        return $pluginInfo;
     }
 
     /**
@@ -103,5 +77,16 @@ class CheckPlugin extends ShopwareCommand
             ];
         }
         return $rows;
+    }
+
+    /**
+     * @param OutputInterface $output
+     */
+    private function refreshPluginList(OutputInterface $output)
+    {
+        $app = $this->getApplication();
+        $app->doRun(new ArrayInput([
+            'command' => 'sw:plugin:refresh',
+        ]), $output);
     }
 }
