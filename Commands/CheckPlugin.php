@@ -110,6 +110,6 @@ class CheckPlugin extends ShopwareCommand
      * @return \RawPluginLoader\Service\PrepareShop
      */
     private function getPrepareShop(){
-        return $this->container->get('raw_plugin_loader.service.prepare_shop')
+        return $this->container->get('raw_plugin_loader.service.prepare_shop');
     }
 }
