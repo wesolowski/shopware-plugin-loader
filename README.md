@@ -71,12 +71,12 @@ return [
 Work with new and legacy plugin system. 
 
 ##### Options:
-- **active**:  
-  - _true_: install and activate plugins
-  - _false_: deactivate and uninstall plugin
-- **clearcache**:
-  - _true_: remove folder production and testing in /var/cache and generate attributes
-  - _false_: do nothing 
+- **active**
+  - _true_ - install and activate plugins
+  - _false_ - deactivate and uninstall plugin
+- **clearcache**
+  - _true_ - remove folder production and testing in /var/cache and generate attributes
+  - _false_ - do nothing 
 
 #### ToDo
 
