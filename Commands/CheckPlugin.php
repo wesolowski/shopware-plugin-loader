@@ -28,9 +28,9 @@ class CheckPlugin extends ShopwareCommand
         $this->refreshPluginList($output);
 
         $app = $this->getApplication();
-        $pluginsConfigs = (new PluginList(
-            $this->getContainer()->get('kernel')->getRootDir()
-        ))->getPluginConfigs();
+        $prepareShop = $this->container->get('raw_plugin_loader.service.prepare_shop');
+
+        $pluginsConfigs = $this->container->get('raw_plugin_loader.service.plugin_list')->getPluginConfigs();
         $pluginListInfo = $this->getShopwarePluginInfo();
         $activatePlugin = new ActivatePlugin(
             $app,
@@ -42,13 +42,21 @@ class CheckPlugin extends ShopwareCommand
             $pluginIndent = basename($pluginPath);
 
             if (isset($pluginConfig['active'])) {
-                $activatePlugin->checkPlugin(
+                $pluginStatus = $activatePlugin->checkPlugin(
                     (bool)$pluginConfig['active'],
                     $pluginIndent,
                     $pluginPath
                 );
+                if (isset($pluginConfig['clearcache'])
+                    && $pluginConfig['clearcache']
+                    && $pluginStatus !== ActivatePlugin::PluginNoChange) {
+                    $prepareShop->setClearCache();
+                }
             }
         }
+
+        $prepareShop->clearCache($output, $app);
+
         $output->writeln("");
         $output->writeln("CheckPlugin is completed");
     }
