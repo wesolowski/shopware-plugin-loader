@@ -26,9 +26,7 @@ class CheckPlugin extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->refreshPluginList($output);
-
         $app = $this->getApplication();
-        $prepareShop = $this->container->get('raw_plugin_loader.service.prepare_shop');
 
         $pluginsConfigs = $this->container->get('raw_plugin_loader.service.plugin_list')->getPluginConfigs();
         $pluginListInfo = $this->getShopwarePluginInfo();
@@ -47,15 +45,11 @@ class CheckPlugin extends ShopwareCommand
                     $pluginIndent,
                     $pluginPath
                 );
-                if (isset($pluginConfig['clearcache'])
-                    && $pluginConfig['clearcache']
-                    && $pluginStatus !== ActivatePlugin::PluginNoChange) {
-                    $prepareShop->setClearCache();
-                }
+                $this->checkClearCache($pluginConfig, $pluginStatus);
             }
         }
 
-        $prepareShop->clearCache($output, $app);
+        $this->getPrepareShop()->clearCache($output, $app);
 
         $output->writeln("");
         $output->writeln("CheckPlugin is completed");
@@ -96,5 +90,26 @@ class CheckPlugin extends ShopwareCommand
         $app->doRun(new ArrayInput([
             'command' => 'sw:plugin:refresh',
         ]), $output);
+    }
+
+    /**
+     * @param array $pluginConfig
+     * @param int $pluginStatus
+     */
+    private function checkClearCache(array $pluginConfig, $pluginStatus)
+    {
+        if (isset($pluginConfig['clearcache'])
+            && $pluginConfig['clearcache']
+            && $pluginStatus !== ActivatePlugin::PluginNoChange
+        ) {
+            $this->getPrepareShop()->setClearCache();
+        }
+    }
+
+    /**
+     * @return \RawPluginLoader\Service\PrepareShop
+     */
+    private function getPrepareShop(){
+        return $this->container->get('raw_plugin_loader.service.prepare_shop')
     }
 }
