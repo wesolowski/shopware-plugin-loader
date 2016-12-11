@@ -45,7 +45,7 @@ File: /custom/plugins/MyPlugin/pluginconfig.dist.php
 <?php
 return [
     'active' => true,
-    'foo' => 123
+    'clearcache' => true
 ];
 ```
 
@@ -53,8 +53,7 @@ File: /custom/plugins/MyPlugin/pluginconfig.php
 ```php
 <?php
 return [
-    'active' => false,
-    'bar' => 987
+    'active' => false
 ];
 ```
 
@@ -63,14 +62,21 @@ Result for plugin-loader:
 <?php
 return [
     'active' => false,
-    'bar' => 987,
-    'foo' => 123
+    'clearcache' => true,
 ];
 ```
 
 #### Info
 
-Work with new and "legacy" plugin system. 
+Work with new and legacy plugin system. 
+
+##### Options:
+- **active**:  
+  - _true_: install and activate plugins
+  - _false_: deactivate and uninstall plugin
+- **clearcache**:
+  - _true_: remove folder production and testing in /var/cache and generate attributes
+  - _false_: do nothing 
 
 #### ToDo
 
