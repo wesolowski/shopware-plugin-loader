@@ -8,6 +8,12 @@ use Symfony\Component\Console\Input\ArrayInput;
 
 class ActivatePlugin
 {
+    const PluginNoChange = 0;
+
+    const PluginIsActivated = 1;
+
+    const PluginIsDeactivated = 2;
+
 
     /**
      * @var Application
@@ -40,24 +46,30 @@ class ActivatePlugin
      * @param bool $isPluginActive
      * @param string $pluginIndent
      * @param string $pluginPath
+     * @return int
      */
     public function checkPlugin($isPluginActive, $pluginIndent, $pluginPath)
     {
+        $status = ActivatePlugin::PluginNoChange;
         if (isset($this->pluginListInfo[$pluginIndent])
             && !$this->pluginListInfo[$pluginIndent]['active']
             && $isPluginActive
         ) {
             $this->activatePlugin($pluginIndent);
+            $status = ActivatePlugin::PluginIsActivated;
         } elseif (isset($this->pluginListInfo[$pluginIndent])
             && $this->pluginListInfo[$pluginIndent]['active']
             && !$isPluginActive
         ) {
             $this->unistallPlugin($pluginIndent);
+            $status = ActivatePlugin::PluginIsDeactivated;
         }
 
         if (!$isPluginActive) {
             $this->deleteUnitTestFolder($pluginPath);
         }
+
+        return $status;
     }
 
     /**
@@ -83,7 +95,7 @@ class ActivatePlugin
     /**
      * @param string $pluginIndent
      */
-    protected function unistallPlugin($pluginIndent)
+    private function unistallPlugin($pluginIndent)
     {
         $app = $this->app;
 

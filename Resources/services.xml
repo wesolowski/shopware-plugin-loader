@@ -6,5 +6,11 @@
         <service class="RawPluginLoader\Commands\CheckPlugin" id="raw_plugin_loader.commands.check_plugin">
             <tag name="console.command"/>
         </service>
+        <service class="RawPluginLoader\Service\PrepareShop" id="raw_plugin_loader.service.prepare_shop">
+            <argument>%kernel.cache_dir%</argument>
+        </service>
+        <service class="RawPluginLoader\Service\PluginList" id="raw_plugin_loader.service.plugin_list">
+            <argument>%kernel.root_dir%</argument>
+        </service>
     </services>
 </container>
