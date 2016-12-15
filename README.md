@@ -83,5 +83,5 @@ Work with new and legacy plugin system.
 * Update plugin
 * Composer install
 * Set plugin config
-* Create plugin for shopware 5.1 and shopware 4.3
+* Create plugin for shopware 5.1 or lower
 
