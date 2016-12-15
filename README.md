@@ -79,7 +79,9 @@ Work with new and legacy plugin system.
   - _false_ - do nothing 
 
 #### ToDo
-
+* Re-Install plugin
+* Update plugin
+* Composer install
 * Set plugin config
 * Create plugin for shopware 5.1 and shopware 4.3
 
