@@ -38,8 +38,12 @@ class CheckPlugin extends ShopwareCommand
 
         foreach ($pluginsConfigs as $pluginPath => $pluginConfig) {
             $pluginIndent = basename($pluginPath);
-
-            if (isset($pluginConfig['active'])) {
+            $output->writeln("Plugin " . $pluginIndent);
+            if (isset($pluginConfig['reinstall']) && (bool)$pluginConfig['reinstall']) {
+                $activatePlugin->reinstallPlugin($pluginIndent);
+                $this->checkClearCache($pluginConfig, ActivatePlugin::PluginIsActivated);
+                $output->writeln("Reinstall plugin");
+            } elseif (isset($pluginConfig['active'])) {
                 $pluginStatus = $activatePlugin->checkPlugin(
                     (bool)$pluginConfig['active'],
                     $pluginIndent,
@@ -109,7 +113,8 @@ class CheckPlugin extends ShopwareCommand
     /**
      * @return \RawPluginLoader\Service\PrepareShop
      */
-    private function getPrepareShop(){
+    private function getPrepareShop()
+    {
         return $this->container->get('raw_plugin_loader.service.prepare_shop');
     }
 }

@@ -75,6 +75,20 @@ class ActivatePlugin
     /**
      * @param string $pluginIndent
      */
+    public function reinstallPlugin($pluginIndent)
+    {
+        $app = $this->app;
+
+        $input = new ArrayInput([
+            'command' => 'sw:plugin:reinstall',
+            'plugin' => $pluginIndent
+        ]);
+        $app->doRun($input, $this->output);
+    }
+
+    /**
+     * @param string $pluginIndent
+     */
     private function activatePlugin($pluginIndent)
     {
         $app = $this->app;

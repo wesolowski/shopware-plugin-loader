@@ -39,8 +39,8 @@ class PrepareShop
     {
         if ($this->clearCacheAfterCheckPlugin === true) {
             $output->writeln("Clear cache");
-            system("rm -rf " . dirname($this->cacheDir ) . '/production*');
-            system("rm -rf " . dirname($this->cacheDir ) . '/testing*');
+            system("rm -rf " . dirname($this->cacheDir) . '/production*');
+            system("rm -rf " . dirname($this->cacheDir) . '/testing*');
 
             $input = new ArrayInput([
                 'command' => 'sw:generate:attributes'

@@ -77,9 +77,23 @@ Work with new and legacy plugin system.
 - **clearcache**
   - _true_ - remove folder production and testing in /var/cache and generate attributes
   - _false_ - do nothing 
+- **reinstall**
+  - _true_ - reinstall and activate plugins - always whenever this command is executed
+  - _false_ - do nothing
+  
 
+Config with all options
+```php
+<?php
+return [
+  'active' => true,
+  'clearcache' => true,
+  'reinstall' => false,
+];
+```
+  
+  
 #### ToDo
-* Re-Install plugin
 * Update plugin
 * Composer install
 * Set plugin config
