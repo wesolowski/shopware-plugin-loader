@@ -3,6 +3,9 @@ Required Minimum Shopware Version 5.2.2
 
 ### Installation
 * Checkout Plugin in /custom/plugins/RawPluginLoader
+```
+git clone  https://github.com/wesolowski/shopware-plugin-loader.git RawPluginLoader
+```
 * Install the Plugin with the Plugin Manager
 
 ### Command
