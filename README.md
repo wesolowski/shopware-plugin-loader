@@ -48,7 +48,8 @@ File: /custom/plugins/MyPlugin/pluginconfig.dist.php
 <?php
 return [
     'active' => true,
-    'clearcache' => true
+    'clearcache' => true,
+    'prio' => 1
 ];
 ```
 
@@ -66,6 +67,7 @@ Result for plugin-loader:
 return [
     'active' => false,
     'clearcache' => true,
+    'prio' => 1
 ];
 ```
 
@@ -83,6 +85,8 @@ Work with new and legacy plugin system.
 - **reinstall**
   - _true_ - reinstall and activate plugins - always whenever this command is executed
   - _false_ - do nothing
+- **prio**
+  - _#_ - set priority, in which order the plugins should be loaded (can be a negative and a positive number)
   
 
 Config with all options
@@ -92,6 +96,7 @@ return [
   'active' => true,
   'clearcache' => true,
   'reinstall' => false,
+  'prio' => 1,
 ];
 ```
   
