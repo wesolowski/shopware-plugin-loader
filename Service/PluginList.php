@@ -26,10 +26,18 @@ class PluginList
     {
         $pluginDir = '/custom/plugins/*/';
         $legacyPluginDir = '/engine/Shopware/Plugins/Local/*/*/';
-        return array_merge(
+        $pluginConfigs = array_merge(
             $this->getPluginInfo($pluginDir),
             $this->getPluginInfo($legacyPluginDir)
         );
+
+        uasort($pluginConfigs, function($a, $b) {
+            $prioA = (int) isset($a['prio']) ? $a['prio'] : 0;
+            $prioB = (int) isset($b['prio']) ? $b['prio'] : 0;
+            return $prioA < $prioB ? 1 : -1;
+        });
+
+        return $pluginConfigs;
     }
 
     /**
