@@ -34,7 +34,10 @@ class PluginList
         uasort($pluginConfigs, function($a, $b) {
             $prioA = (int) isset($a['prio']) ? $a['prio'] : 0;
             $prioB = (int) isset($b['prio']) ? $b['prio'] : 0;
-            return $prioA < $prioB ? 1 : -1;
+            if( $prioA === $prioB ) {
+                return 0;
+            }
+            return $prioA > $prioB ? 1 : -1;
         });
 
         return $pluginConfigs;
