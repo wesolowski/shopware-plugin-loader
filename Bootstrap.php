@@ -9,9 +9,6 @@ class Shopware_Plugins_Core_RawPluginLoader_Bootstrap extends Shopware_Component
      */
     private $pluginInfo;
 
-    /**
-     * The afterInit function registers the custom plugin models.
-     */
     public function afterInit()
     {
         $this->get('Loader')->registerNamespace(
@@ -42,7 +39,6 @@ class Shopware_Plugins_Core_RawPluginLoader_Bootstrap extends Shopware_Component
     }
 
     /**
-     * Der Name des Plugins
      * @return string
      */
     public function getLabel()
@@ -69,7 +65,7 @@ class Shopware_Plugins_Core_RawPluginLoader_Bootstrap extends Shopware_Component
         $container = Shopware()->Container();
         $rootDir = $container->getParameter('kernel.root_dir');
         $cacheDir = $container->getParameter('kernel.cache_dir');
-        dump($rootDir);
+
         $container->set(
             'raw_plugin_loader.service.prepare_shop',
             new \RawPluginLoader\Service\PrepareShop($cacheDir)
